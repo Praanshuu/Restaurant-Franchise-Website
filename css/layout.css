@@ -1,0 +1,75 @@
+/* layout.css */
+body {
+  background-color: var(--color-background);
+  color: var(--color-primary-text);
+  font-family: var(--font-body);
+  font-weight: 400;
+}
+
+.container {
+  width: 100%;
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 var(--spacing-md);
+}
+
+section {
+  padding: var(--spacing-xxl) 0;
+}
+
+/* Typography scale */
+h1, .h1 {
+  font-family: var(--font-heading);
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  line-height: 1.1;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+h2, .h2 {
+  font-family: var(--font-heading);
+  font-size: clamp(2rem, 4vw, 3rem);
+  line-height: 1.2;
+  font-weight: 600;
+  margin-bottom: var(--spacing-lg);
+}
+
+h3, .h3 {
+  font-family: var(--font-heading);
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  line-height: 1.3;
+  font-weight: 600;
+}
+
+p {
+  color: var(--color-secondary-text);
+  font-size: 1.125rem;
+  font-weight: 400;
+}
+
+.caption {
+  font-size: 0.875rem;
+  color: var(--color-secondary-text);
+}
+
+.accent-text {
+  font-family: var(--font-accent);
+  font-style: italic;
+  font-size: 1.25rem;
+  color: var(--color-secondary-text);
+}
+
+/* Visibility Utilities */
+.fade-in-section {
+  opacity: 0;
+  transform: translateY(20px);
+  visibility: hidden;
+  transition: opacity var(--transition-normal), transform var(--transition-normal);
+  will-change: opacity, transform, visibility;
+}
+
+.fade-in-section.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+  visibility: visible;
+}
