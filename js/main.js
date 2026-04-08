@@ -1,67 +1,47 @@
 /**
  * main.js
- * Functionality for sticky nav, scroll fade animations, etc.
+ * Functionality for sticky nav and scroll storytelling animations.
  */
 
 document.addEventListener('DOMContentLoaded', () => {
-  initStickyNav();
-  initScrollAnimations();
+    initStickyNav();
+    initScrollAnimations();
 });
 
 function initStickyNav() {
-  const navbar = document.querySelector('.navbar');
-  if (!navbar) return;
+    const navbar = document.querySelector('.navbar');
+    if (!navbar) return;
 
-  let lastScrollTop = 0;
-  const delta = 5;
-  const navbarHeight = navbar.offsetHeight;
-
-  window.addEventListener('scroll', () => {
-    const st = window.pageYOffset || document.documentElement.scrollTop;
-    
-    // Add background on scroll down
-    if (st > 50) {
-      navbar.classList.add('scrolled');
-    } else {
-      navbar.classList.remove('scrolled');
-    }
-
-    // Smart Scroll: Make sure they scroll more than delta
-    if (Math.abs(lastScrollTop - st) <= delta) return;
-
-    // If they scrolled down and are past the navbar, add class .nav-up.
-    if (st > lastScrollTop && st > navbarHeight) {
-      // Scroll Down
-      navbar.classList.add('nav-up');
-    } else {
-      // Scroll Up
-      if (st + window.innerHeight < document.documentElement.scrollHeight) {
-        navbar.classList.remove('nav-up');
-      }
-    }
-
-    lastScrollTop = st;
-  });
+    window.addEventListener('scroll', () => {
+        const st = window.pageYOffset || document.documentElement.scrollTop;
+        if (st > 50) {
+            navbar.classList.add('scrolled');
+        } else {
+            navbar.classList.remove('scrolled');
+        }
+    }, { passive: true });
 }
 
 function initScrollAnimations() {
-  const elements = document.querySelectorAll('.fade-in-section');
-  if (!elements.length) return;
+    // Select elements that should reveal on scroll
+    const revealElements = document.querySelectorAll('.scroll-reveal, .fade-up-sequence');
+    if (!revealElements.length) return;
 
-  const observerOptions = {
-    root: null,
-    rootMargin: '0px',
-    threshold: 0.15
-  };
+    const observerOptions = {
+        root: null,
+        rootMargin: '0px 0px -100px 0px', // Trigger slightly before the element enters
+        threshold: 0.1 // 10% of the element must be visible
+    };
 
-  const observer = new IntersectionObserver((entries, observer) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('is-visible');
-        observer.unobserve(entry.target);
-      }
-    });
-  }, observerOptions);
+    const observer = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('is-visible');
+                // Optional: Stop observing once revealed if you only want it to happen once
+                observer.unobserve(entry.target); 
+            }
+        });
+    }, observerOptions);
 
-  elements.forEach(el => observer.observe(el));
+    revealElements.forEach(el => observer.observe(el));
 }

@@ -1,75 +1,119 @@
-/* layout.css */
+/* layout.css - Core Structure and Typography */
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px; /* Base for rem */
+}
+
 body {
   background-color: var(--color-background);
   color: var(--color-primary-text);
   font-family: var(--font-body);
   font-weight: 400;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  text-wrap: balance; /* Prevents awkward widows in paragraphs */
+}
+
+.dark-surface {
+  background-color: var(--color-primary-text);
+  color: var(--color-background);
+}
+
+.text-contrast {
+  color: var(--color-background) !important;
+}
+
+.text-center {
+  text-align: center;
 }
 
 .container {
   width: 100%;
   max-width: var(--max-width);
   margin: 0 auto;
-  padding: 0 var(--spacing-md);
+  padding: 0 var(--spacing-6); /* Consistent padding */
 }
 
-section {
-  padding: var(--spacing-xxl) 0;
+.container-narrow {
+  max-width: 800px;
 }
 
-/* Typography scale */
-h1, .h1 {
+/* Section Spacing */
+.section-padding {
+  padding: var(--spacing-24) 0;
+}
+
+@media (min-width: 768px) {
+  .section-padding {
+    padding: var(--spacing-32) 0;
+  }
+}
+
+/* Typography Hierarchy */
+h1, .h1, h2, .h2, h3, .h3, h4, .h4 {
   font-family: var(--font-heading);
-  font-size: clamp(2.5rem, 5vw, 4rem);
-  line-height: 1.1;
   font-weight: 600;
-  letter-spacing: -0.02em;
+  color: inherit;
+  margin-bottom: var(--spacing-4);
+  line-height: 1.2;
+}
+
+h1, .h1 {
+  font-size: clamp(3rem, 6vw, 5rem);
+  letter-spacing: -0.03em;
 }
 
 h2, .h2 {
-  font-family: var(--font-heading);
-  font-size: clamp(2rem, 4vw, 3rem);
-  line-height: 1.2;
-  font-weight: 600;
-  margin-bottom: var(--spacing-lg);
+  font-size: clamp(2.5rem, 4vw, 3.5rem);
+  letter-spacing: -0.02em;
 }
 
 h3, .h3 {
-  font-family: var(--font-heading);
   font-size: clamp(1.5rem, 3vw, 2rem);
-  line-height: 1.3;
-  font-weight: 600;
 }
 
 p {
   color: var(--color-secondary-text);
   font-size: 1.125rem;
-  font-weight: 400;
+  margin-bottom: var(--spacing-6);
 }
 
-.caption {
-  font-size: 0.875rem;
-  color: var(--color-secondary-text);
+.dark-surface p {
+  color: hsla(35, 20%, 94%, 0.8);
 }
 
-.accent-text {
-  font-family: var(--font-accent);
-  font-style: italic;
-  font-size: 1.25rem;
-  color: var(--color-secondary-text);
+.section-body {
+  font-size: clamp(1.125rem, 2vw, 1.35rem);
 }
 
-/* Visibility Utilities */
-.fade-in-section {
+/* Scroll Reveal Utilities */
+.scroll-reveal {
   opacity: 0;
-  transform: translateY(20px);
-  visibility: hidden;
-  transition: opacity var(--transition-normal), transform var(--transition-normal);
-  will-change: opacity, transform, visibility;
+  transform: translateY(30px);
+  will-change: opacity, transform;
+  transition: opacity var(--transition-slow), transform var(--transition-slow);
 }
 
-.fade-in-section.is-visible {
+.scroll-reveal.is-visible {
   opacity: 1;
   transform: translateY(0);
-  visibility: visible;
+}
+
+.fade-up-sequence > * {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeUpSequence 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.fade-up-sequence > *:nth-child(1) { animation-delay: 0.2s; }
+.fade-up-sequence > *:nth-child(2) { animation-delay: 0.4s; }
+.fade-up-sequence > *:nth-child(3) { animation-delay: 0.6s; }
+.fade-up-sequence > *:nth-child(4) { animation-delay: 0.8s; }
+
+@keyframes fadeUpSequence {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
