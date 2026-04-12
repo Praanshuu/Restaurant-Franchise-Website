@@ -1,119 +1,382 @@
-/* layout.css - Core Structure and Typography */
-
-html {
-  scroll-behavior: smooth;
-  font-size: 16px; /* Base for rem */
-}
+/* layout.css - Cinematic Concierge (Responsive Expansion) */
 
 body {
-  background-color: var(--color-background);
-  color: var(--color-primary-text);
+  background-color: var(--color-bg);
+  color: var(--color-text);
   font-family: var(--font-body);
+  transition: background-color var(--transition-normal), color var(--transition-normal);
+  overflow-x: hidden;
+  background-image: var(--color-bg-mesh);
+  background-attachment: fixed;
+}
+
+/* Typography Scale */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
   font-weight: 400;
-  line-height: 1.6;
-  -webkit-font-smoothing: antialiased;
-  text-wrap: balance; /* Prevents awkward widows in paragraphs */
+  line-height: 1.05;
+  color: var(--color-text);
 }
 
-.dark-surface {
-  background-color: var(--color-primary-text);
-  color: var(--color-background);
+.serif-italic {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 400;
 }
 
-.text-contrast {
-  color: var(--color-background) !important;
+/* Fluid Typography scaling beautifully on mobile */
+.display-title {
+  font-size: clamp(3.5rem, 12vw, 8.5rem);
+  letter-spacing: -0.01em;
 }
 
-.text-center {
+.section-header {
+  font-size: clamp(2.5rem, 8vw, 4.5rem);
+  margin-bottom: var(--space-12);
   text-align: center;
 }
 
+.text-left { text-align: left; }
+.text-center { text-align: center; }
+
+.hero-subtitle {
+  font-family: var(--font-body);
+  font-size: clamp(1rem, 2.5vw, 1.25rem);
+  font-weight: 400;
+  margin-top: var(--space-4);
+  opacity: 0.85;
+}
+
+/* Containers & Whitespace */
 .container {
   width: 100%;
   max-width: var(--max-width);
   margin: 0 auto;
-  padding: 0 var(--spacing-6); /* Consistent padding */
+  padding: 0 var(--content-padding);
 }
 
-.container-narrow {
-  max-width: 800px;
+.container-max { max-width: 1200px; }
+.wrapper-padding { padding: 0 var(--content-padding); }
+
+/* Using fluid spaces for precise responsiveness */
+.section-padding { padding: var(--space-24) 0; }
+
+/* Reservation section blends directly from hero — no gap */
+#reservation {
+  background: rgba(3, 3, 3, 1); /* Matches the solid bottom of hero gradient exactly */
+  padding-top: var(--space-16); /* Reduced top since hero bleeds into it */
+}
+.section-full {
+  width: 100%;
+  height: 100vh; 
+  height: 100svh; 
+  position: relative;
 }
 
-/* Section Spacing */
-.section-padding {
-  padding: var(--spacing-24) 0;
+/* Base Utilities */
+.mesh-bg {
+  position: relative;
+}
+.mesh-bg::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100%;
+  background: var(--color-bg-mesh);
+  z-index: -1;
+  pointer-events: none;
 }
 
-@media (min-width: 768px) {
-  .section-padding {
-    padding: var(--spacing-32) 0;
-  }
+/* Navbar - Redesigned with blur background */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: clamp(70px, 8vw, 100px);
+  z-index: 50;
+  pointer-events: none;
+  
+  /* Added Glass blur effect instead of difference blend */
+  background: rgba(3, 3, 3, 0.5);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
 }
 
-/* Typography Hierarchy */
-h1, .h1, h2, .h2, h3, .h3, h4, .h4 {
-  font-family: var(--font-heading);
-  font-weight: 600;
-  color: inherit;
-  margin-bottom: var(--spacing-4);
-  line-height: 1.2;
+.nav-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 100%;
+  padding: 0 var(--content-padding);
 }
 
-h1, .h1 {
-  font-size: clamp(3rem, 6vw, 5rem);
-  letter-spacing: -0.03em;
+.brand-logo {
+  font-family: var(--font-display);
+  font-size: clamp(1.25rem, 4vw, 1.75rem);
+  pointer-events: auto;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-text); /* Now explicitly using text color since mix-blend is gone */
 }
 
-h2, .h2 {
-  font-size: clamp(2.5rem, 4vw, 3.5rem);
-  letter-spacing: -0.02em;
+/* Hero Section */
+.hero {
+  display: flex;
+  align-items: flex-end; 
+  justify-content: flex-start;
+  overflow: hidden;
+  padding-bottom: clamp(10vh, 15vh, 20vh); 
+  position: relative;
 }
 
-h3, .h3 {
-  font-size: clamp(1.5rem, 3vw, 2rem);
+.hero-bg-video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -3;
 }
 
-p {
-  color: var(--color-secondary-text);
-  font-size: 1.125rem;
-  margin-bottom: var(--spacing-6);
+.hero-mesh-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  /* Gradient fades hero video to solid black at the very bottom — seamlessly matching reservation bg */
+  background: linear-gradient(to top, rgba(3, 3, 3, 1) 0%, rgba(3, 3, 3, 0.65) 30%, rgba(3, 3, 3, 0.1) 70%, transparent 100%);
+  z-index: -1;
 }
 
-.dark-surface p {
-  color: hsla(35, 20%, 94%, 0.8);
+/* Subtle amber radial glow for the hero title area */
+.hero-mesh-overlay::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 60%;
+  height: 60%;
+  background: radial-gradient(circle at bottom left, rgba(229, 169, 61, 0.12), transparent 60%);
 }
 
-.section-body {
-  font-size: clamp(1.125rem, 2vw, 1.35rem);
+/* Extension bridge: hero bottom bleeds into reservation section with zero gap */
+.hero::after {
+  content: '';
+  position: absolute;
+  bottom: -2px; /* Overlap by 2px to prevent any hairline gap */
+  left: 0;
+  width: 100%;
+  height: 120px;
+  background: linear-gradient(to bottom, rgba(3, 3, 3, 1), rgba(3, 3, 3, 1));
+  z-index: 5; /* Above video, below content */
+  pointer-events: none;
 }
 
-/* Scroll Reveal Utilities */
-.scroll-reveal {
+.hero-content {
+  z-index: 10;
+  max-width: 900px;
+  position: relative;
+}
+
+.hero-title {
+  margin-left: -0.05em; 
+}
+
+/* Menu Overlay */
+.menu-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  height: 100svh;
+  background-color: var(--color-bg);
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  clip-path: circle(0% at auto); 
+  visibility: hidden;
+}
+
+.menu-overlay.is-active {
+  clip-path: circle(150% at auto);
+  visibility: visible;
+}
+
+.nav-links {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-6);
+}
+
+.nav-item {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 8vw, 4.5rem);
+  text-transform: uppercase;
+  position: relative;
+  overflow: hidden;
   opacity: 0;
-  transform: translateY(30px);
-  will-change: opacity, transform;
-  transition: opacity var(--transition-slow), transform var(--transition-slow);
+  transform: translateY(40px);
+  transition: opacity 0.6s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
-.scroll-reveal.is-visible {
+.nav-item:hover {
+  font-style: italic;
+  color: var(--color-accent);
+}
+
+.menu-overlay.is-active .nav-item {
   opacity: 1;
   transform: translateY(0);
 }
 
-.fade-up-sequence > * {
+/* Stagger calculation */
+.menu-overlay.is-active .nav-item:nth-child(1) { transition-delay: 0.1s; }
+.menu-overlay.is-active .nav-item:nth-child(2) { transition-delay: 0.15s; }
+.menu-overlay.is-active .nav-item:nth-child(3) { transition-delay: 0.2s; }
+.menu-overlay.is-active .nav-item:nth-child(4) { transition-delay: 0.25s; }
+.menu-overlay.is-active .nav-item:nth-child(5) { transition-delay: 0.3s; }
+.menu-overlay.is-active .nav-item:nth-child(6) { transition-delay: 0.35s; }
+.menu-overlay.is-active .nav-item:nth-child(7) { transition-delay: 0.4s; }
+
+.menu-footer {
+  position: absolute;
+  bottom: var(--space-8);
+  text-align: center;
+  font-size: clamp(0.75rem, 2vw, 0.875rem);
+  color: var(--color-text-muted);
   opacity: 0;
-  transform: translateY(20px);
-  animation: fadeUpSequence 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  transition: opacity 0.5s ease 0.8s;
+  padding: 0 var(--content-padding);
 }
 
-.fade-up-sequence > *:nth-child(1) { animation-delay: 0.2s; }
-.fade-up-sequence > *:nth-child(2) { animation-delay: 0.4s; }
-.fade-up-sequence > *:nth-child(3) { animation-delay: 0.6s; }
-.fade-up-sequence > *:nth-child(4) { animation-delay: 0.8s; }
+.menu-overlay.is-active .menu-footer { opacity: 1; }
 
-@keyframes fadeUpSequence {
-  to {
-    opacity: 1;
-    transform: translateY(0);
+/* GSAP Sections */
+.tasting-section {
+  width: 100%;
+  position: relative;
+}
+
+.tasting-track-container {
+  height: 100vh;
+  height: 100svh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.tasting-title {
+  position: absolute;
+  top: clamp(8vh, 12vh, 15vh);
+  left: var(--content-padding);
+  font-size: clamp(2.5rem, 8vw, 4.5rem);
+  z-index: 10;
+  text-shadow: 0 4px 20px rgba(0,0,0,0.6); 
+}
+
+.tasting-track {
+  display: flex;
+  width: 400vw;
+  height: 100%;
+  align-items: center;
+}
+
+.tasting-panel {
+  width: 100vw;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 var(--content-padding);
+}
+
+/* Grids */
+.atmosphere-grid, .wayfinder-split {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-12);
+  align-items: center;
+}
+
+@media (min-width: 900px) {
+  .atmosphere-grid, .wayfinder-split {
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-16);
   }
+}
+
+/* Occasions Layout */
+.occasions-grid {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+}
+
+@media (min-width: 900px) {
+  .occasions-grid {
+    flex-direction: row;
+    justify-content: space-between;
+    gap: var(--space-6);
+  }
+}
+
+/* Social Proof Masonry */
+.masonry-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-6);
+}
+
+@media (min-width: 600px) {
+  .masonry-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.parallax-img-wrapper {
+  overflow: hidden;
+  height: clamp(300px, 50vh, 80vh); 
+  border-radius: var(--radius-md);
+}
+
+.parallax-img {
+  width: 100%;
+  height: 130%;
+  object-fit: cover;
+}
+
+.investors-section {
+  margin-bottom: var(--space-24);
+  padding-bottom: 80px; 
+}
+
+/* Footer Focus */
+.footer {
+  border-top: 1px solid var(--color-border);
+  background-color: var(--color-surface);
+  padding: var(--space-16) 0 calc(var(--space-24) + 60px) 0; 
+  text-align: center;
+}
+
+.footer-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-6);
+}
+
+.brand-footer {
+  font-size: clamp(2rem, 6vw, 3.5rem);
 }

@@ -1,0 +1,32 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Cormorant+Garamond:ital,wght@0,300..700;1,300..700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "DM Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Playfair Display", ui-serif, Georgia, serif;
+  --font-italic: "Cormorant Garamond", serif;
+
+  --color-ink: #1C1814;
+  --color-parchment: #F7F2EC;
+  --color-saffron: #C4763A;
+  --color-herb: #3D6B5A;
+  --color-cream: #EDE8E1;
+  --color-stone: #7A7069;
+  --color-espresso: #2A2420;
+}
+
+@layer base {
+  body {
+    @apply bg-parchment text-ink font-sans antialiased;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-serif;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
