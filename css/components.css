@@ -723,3 +723,90 @@ input[type="date"]::-webkit-inner-spin-button {
   background-color: var(--color-border);
   margin: 0 4px;
 }
+
+/* Ambient Orbs for Empty Spaces */
+.ambient-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  z-index: -2;
+  pointer-events: none;
+  opacity: 0.12;
+  background: var(--color-accent);
+}
+
+.orb-1 {
+  width: clamp(200px, 40vw, 400px); 
+  height: clamp(200px, 40vw, 400px);
+  right: -10%; top: 10%;
+  animation: floatOrb 15s infinite ease-in-out alternate;
+}
+
+.orb-2 {
+  width: clamp(150px, 30vw, 300px); 
+  height: clamp(150px, 30vw, 300px);
+  left: -10%; bottom: 15%;
+  background: #C67C4E;
+  animation: floatOrb 18s infinite ease-in-out alternate-reverse;
+}
+
+.orb-3 {
+  width: clamp(250px, 50vw, 450px);
+  height: clamp(250px, 50vw, 450px);
+  left: 30%; top: 30%;
+  background: rgba(229, 169, 61, 0.5);
+  animation: floatOrb 25s infinite ease-in-out alternate;
+}
+
+@keyframes floatOrb {
+  0% { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(-30px, 40px) scale(1.05); }
+}
+
+/* Animated Occasion SVGs */
+.occ-icon-wrapper {
+  margin-bottom: var(--space-4);
+  color: var(--color-accent);
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.occ-svg {
+  width: clamp(36px, 6vw, 48px);
+  height: clamp(36px, 6vw, 48px);
+  opacity: 0.9;
+}
+
+.anim-pulse-slow {
+  animation: svgPulse 3s ease-in-out infinite alternate;
+  transform-origin: center;
+}
+.anim-spin-slow {
+  animation: svgSpin 15s linear infinite;
+  transform-origin: center;
+}
+.anim-float {
+  animation: svgFloat 4s ease-in-out infinite alternate;
+}
+.anim-draw {
+  stroke-dasharray: 40;
+  stroke-dashoffset: 40;
+  animation: svgDraw 3s cubic-bezier(0.4, 0, 0.2, 1) infinite alternate;
+}
+
+@keyframes svgPulse {
+  0% { transform: scale(1) translateY(0); opacity: 0.8; }
+  100% { transform: scale(1.15) translateY(-2px); opacity: 1; }
+}
+@keyframes svgSpin {
+  100% { transform: rotate(360deg); }
+}
+@keyframes svgFloat {
+  0% { transform: translateY(0) scale(1); }
+  100% { transform: translateY(-4px) scale(1.05); }
+}
+@keyframes svgDraw {
+  0% { stroke-dashoffset: 40; opacity: 0.5; }
+  100% { stroke-dashoffset: 0; opacity: 1; }
+}

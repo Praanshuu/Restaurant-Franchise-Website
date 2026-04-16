@@ -97,17 +97,16 @@ document.addEventListener('DOMContentLoaded', () => {
         const tastingTrack = document.getElementById('tastingTrack');
 
         if (tastingSection && tastingTrack) {
-            let xToMove = -(tastingTrack.scrollWidth - window.innerWidth);
-
+            // Use functional values for full responsiveness on resize
             gsap.to(tastingTrack, {
-                x: xToMove,
+                x: () => -(tastingTrack.scrollWidth - window.innerWidth),
                 ease: "none",
                 scrollTrigger: {
                     trigger: tastingSection,
                     pin: true,
                     scrub: 1, // Smooth scrubbing
-                    start: "top top",
-                    end: `+=${window.innerWidth * 3}`, 
+                    start: "center center",
+                    end: () => `+=${tastingTrack.scrollWidth - window.innerWidth}`, 
                     invalidateOnRefresh: true
                 }
             });
