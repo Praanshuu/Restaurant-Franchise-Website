@@ -23,6 +23,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     requestAnimationFrame(raf);
 
+    // Navbar Scroll-to-Hide Logic (Delegated to robust GSAP ScrollTrigger below)
+    const navbar = document.getElementById('navbar');
+
     // Sync GSAP ScrollTrigger with Lenis
     if (typeof ScrollTrigger !== 'undefined') {
         lenis.on('scroll', ScrollTrigger.update);
@@ -71,9 +74,65 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // 3.5 Full Menu Overlay Logic
+    const openFullMenuBtn = document.getElementById('openFullMenuBtn');
+    const openFullMenuFapBtn = document.getElementById('openFullMenuFapBtn');
+    const fullMenuOverlay = document.getElementById('fullMenuOverlay');
+    const closeMenuOverlayBtn = document.getElementById('closeMenuOverlayBtn');
+    const menuOverlayReserveBtn = document.getElementById('menuOverlayReserveBtn');
+
+    const openMenuOverlay = () => {
+        if (fullMenuOverlay) {
+            fullMenuOverlay.classList.add('is-active');
+            // Note: Since we use data-lenis-prevent, we don't necessarily need to stop Lenis,
+            // but stopping it ensures the background page cannot be scrolled by keyboard.
+            if (typeof lenis !== 'undefined') lenis.stop();
+        }
+    };
+
+    if (openFullMenuBtn) openFullMenuBtn.addEventListener('click', openMenuOverlay);
+    if (openFullMenuFapBtn) openFullMenuFapBtn.addEventListener('click', openMenuOverlay);
+
+    if (fullMenuOverlay && closeMenuOverlayBtn) {
+        closeMenuOverlayBtn.addEventListener('click', () => {
+            fullMenuOverlay.classList.remove('is-active');
+            if (typeof lenis !== 'undefined') lenis.start();
+        });
+    }
+
+    if (menuOverlayReserveBtn) {
+        menuOverlayReserveBtn.addEventListener('click', () => {
+            fullMenuOverlay.classList.remove('is-active');
+            if (typeof lenis !== 'undefined') {
+                lenis.start();
+                // Adding a slight delay to allow modal close animation to start before scrolling
+                setTimeout(() => {
+                    lenis.scrollTo('#reservation', { offset: -100 });
+                }, 100);
+            } else {
+                document.getElementById('reservation').scrollIntoView({ behavior: 'smooth' });
+            }
+        });
+    }
+
     // 4. GSAP Animations Setup
     if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
         gsap.registerPlugin(ScrollTrigger);
+
+        // 0. Navbar Hide/Show on Scroll
+        if (navbar) {
+            ScrollTrigger.create({
+                start: "top -50",
+                end: 99999,
+                onUpdate: (self) => {
+                    if (self.direction === 1) {
+                        navbar.classList.add('nav-hidden');
+                    } else {
+                        navbar.classList.remove('nav-hidden');
+                    }
+                }
+            });
+        }
 
         // a. Hero text reveal - Staggered fade and slide up
         gsap.from('.hero-title', {
@@ -97,16 +156,31 @@ document.addEventListener('DOMContentLoaded', () => {
         const tastingTrack = document.getElementById('tastingTrack');
 
         if (tastingSection && tastingTrack) {
-            // Use functional values for full responsiveness on resize
+            // Calculate the right-side padding to add as breathing room at the end
+            const getRightPad = () => {
+                const padStr = getComputedStyle(document.documentElement)
+                    .getPropertyValue('--content-padding').trim();
+                // Parse the computed pixel value from the container style
+                const dummy = document.createElement('div');
+                dummy.style.cssText = `position:absolute;visibility:hidden;width:${padStr}`;
+                document.body.appendChild(dummy);
+                const px = dummy.getBoundingClientRect().width;
+                document.body.removeChild(dummy);
+                return px;
+            };
+
             gsap.to(tastingTrack, {
+                // Stop short by one content-padding so last card doesn't sit at edge;
+                // the ::after pseudo adds visual padding after the last card too.
                 x: () => -(tastingTrack.scrollWidth - window.innerWidth),
                 ease: "none",
                 scrollTrigger: {
                     trigger: tastingSection,
                     pin: true,
-                    scrub: 1, // Smooth scrubbing
+                    scrub: 1,
+                    // Center the natural-height section in the viewport while scrolling
                     start: "center center",
-                    end: () => `+=${tastingTrack.scrollWidth - window.innerWidth}`, 
+                    end: () => `+=${tastingTrack.scrollWidth - window.innerWidth}`,
                     invalidateOnRefresh: true
                 }
             });
@@ -114,8 +188,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // c. Parallax effects for atmospheric image
         gsap.utils.toArray('.parallax-img').forEach(image => {
+            // Start slightly zoomed in for a cinematic dolly-out effect
+            gsap.set(image, { scale: 1.15 });
+
             gsap.to(image, {
                 yPercent: -20,
+                scale: 1,
                 ease: "none",
                 scrollTrigger: {
                     trigger: image.parentElement,
@@ -147,6 +225,21 @@ document.addEventListener('DOMContentLoaded', () => {
                     toggleActions: "play none none none"
                 }
             });
+        });
+    }
+
+    // 5. Map Interaction Fix (Prevent scroll glitch on mobile)
+    const mapContainer = document.getElementById('mapContainer');
+    const mapIframe = document.getElementById('mapIframe');
+
+    if (mapContainer && mapIframe) {
+        mapContainer.addEventListener('click', () => {
+            mapIframe.style.pointerEvents = 'auto';
+        });
+        
+        // Optional: Re-disable on mouse leave (desktop)
+        mapContainer.addEventListener('mouseleave', () => {
+            mapIframe.style.pointerEvents = 'none';
         });
     }
 });
