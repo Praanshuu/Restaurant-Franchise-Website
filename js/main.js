@@ -5,30 +5,23 @@
  */
 
 document.addEventListener('DOMContentLoaded', () => {
-    console.log("Main JS Initializing...");
 
     // 1. Initialize Lenis Smooth Scrolling (Buttery smooth feel)
-    let lenis;
-    if (typeof Lenis !== 'undefined') {
-        lenis = new Lenis({
-            duration: 1.5,
-            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), 
-            direction: 'vertical',
-            gestureDirection: 'vertical',
-            smooth: true,
-            smoothTouch: false,
-            touchMultiplier: 2,
-        });
+    const lenis = new Lenis({
+        duration: 1.5,
+        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), 
+        direction: 'vertical',
+        gestureDirection: 'vertical',
+        smooth: true,
+        smoothTouch: false,
+        touchMultiplier: 2,
+    });
 
-        function raf(time) {
-            lenis.raf(time);
-            requestAnimationFrame(raf);
-        }
+    function raf(time) {
+        lenis.raf(time);
         requestAnimationFrame(raf);
-        console.log("Lenis Initialized");
-    } else {
-        console.warn("Lenis library not found. Falling back to native scroll.");
     }
+    requestAnimationFrame(raf);
 
     // Navbar Scroll-to-Hide Logic (Delegated to robust GSAP ScrollTrigger below)
     const navbar = document.getElementById('navbar');
@@ -50,12 +43,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function openMenu() {
         menuOverlay.classList.add('is-active');
-        if (lenis) lenis.stop(); // Stop scroll when menu is open
+        lenis.stop(); // Stop scroll when menu is open
     }
 
     function closeMenu() {
         menuOverlay.classList.remove('is-active');
-        if (lenis) lenis.start();
+        lenis.start();
     }
 
     if (menuTrigger && menuCloseBtn && menuOverlay) {
