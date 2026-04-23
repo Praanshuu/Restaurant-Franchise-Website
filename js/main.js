@@ -141,20 +141,24 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // a. Hero text reveal - Staggered fade and slide up
-        gsap.from('.hero-title', {
+        const heroTl = gsap.timeline({ delay: 0.2 });
+        
+        heroTl.from('.hero-title', {
             y: 30,
             opacity: 0,
             duration: 1.2,
-            ease: "power3.out",
-            delay: 0.2
-        });
-
-        gsap.from('.hero-subtitle', {
+            ease: "power3.out"
+        })
+        .from('.hero-subtitle', {
             y: 20,
             opacity: 0,
             duration: 1,
-            ease: "power2.out",
-            delay: 0.6
+            ease: "power2.out"
+        }, "-=0.8"); // Overlap slightly for a smoother feel
+
+        // Refresh ScrollTrigger on window resize to prevent layout shifts
+        window.addEventListener('resize', () => {
+            ScrollTrigger.refresh();
         });
 
         // b. Horizontal Scroll for Tasting Menu Track

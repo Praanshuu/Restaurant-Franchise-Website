@@ -308,16 +308,24 @@
 }
 
 .madlibs-sentence {
-  font-size: clamp(1.4rem, 4.5vw, 2.5rem);
+  font-size: clamp(1.25rem, 4vw, 2.25rem);
   /* Use flex-wrap so each line flows naturally and all items share the same baseline */
   display: flex;
   flex-wrap: wrap;
-  align-items: center; /* All children: text nodes, icons, selects — same Y axis */
+  align-items: baseline; /* Align by text baseline for perfect sentence flow */
   justify-content: center;
-  gap: 0.3em 0.2em;
+  gap: 0.5rem 0.4rem;
   font-family: var(--font-display);
   color: var(--color-text-muted);
-  line-height: 1.6;
+  line-height: 1.4;
+  margin-bottom: var(--space-4);
+}
+
+@media (max-width: 600px) {
+  .madlibs-sentence {
+    gap: 0.4rem 0.3rem;
+    line-height: 1.3;
+  }
 }
 
 /* Input field rows: icon + select/input side by side */
@@ -333,8 +341,9 @@
   color: var(--color-accent);
   opacity: 0.6;
   flex-shrink: 0;
-  width: clamp(1rem, 2.5vw, 1.5rem);  /* Scales with the large sentence text */
-  height: clamp(1rem, 2.5vw, 1.5rem);
+  width: 0.85em; /* Proportional to font size */
+  height: 0.85em;
+  margin-bottom: -0.1em; /* Fine-tune baseline alignment */
   /* Looping breathe animation */
   animation: iconBreathe 3s ease-in-out infinite;
   transition: opacity var(--transition-fast);
@@ -404,16 +413,16 @@
   color: var(--color-text);
   font-family: var(--font-display);
   font-style: italic;
-  font-size: clamp(2.2rem, 5vw, 3rem);
-  padding: 0 0.25rem;
+  font-size: inherit; /* Match parent sentence size exactly */
+  padding: 0 0.15rem;
   cursor: pointer;
   appearance: none;
   -webkit-appearance: none;
   text-align: center;
-  max-width: 22ch;
+  max-width: 100%;
   /* Critical: ensure the input sits on same axis as the icon */
-  line-height: 1;
-  vertical-align: middle;
+  line-height: inherit;
+  vertical-align: baseline;
 }
 
 .madlibs-input:focus {
@@ -706,7 +715,7 @@ input[type="date"]::-webkit-inner-spin-button {
 }
 
 .investors-content {
-  padding: var(--space-8);
+  padding: var(--space-6); /* Reduced from --space-8 */
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -723,7 +732,14 @@ input[type="date"]::-webkit-inner-spin-button {
   display: flex;
   flex-wrap: wrap; 
   gap: var(--space-6);
-  margin: var(--space-8) 0;
+  margin: var(--space-6) 0; /* Reduced vertical margin */
+}
+
+@media (max-width: 480px) {
+  .investor-stats {
+    gap: var(--space-4);
+    margin: var(--space-4) 0;
+  }
 }
 
 .stat-num {
