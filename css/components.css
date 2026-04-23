@@ -308,23 +308,42 @@
 }
 
 .madlibs-sentence {
-  font-size: clamp(1.25rem, 4vw, 2.25rem);
+  font-size: clamp(1.5rem, 5vw, 2.5rem);
   /* Use flex-wrap so each line flows naturally and all items share the same baseline */
   display: flex;
   flex-wrap: wrap;
   align-items: baseline; /* Align by text baseline for perfect sentence flow */
   justify-content: center;
-  gap: 0.5rem 0.4rem;
+  gap: 0.5rem 1rem; /* Horizontal gap between groups */
   font-family: var(--font-display);
   color: var(--color-text-muted);
   line-height: 1.4;
   margin-bottom: var(--space-4);
 }
 
-@media (max-width: 600px) {
+.madlibs-group {
+  display: inline-flex;
+  align-items: baseline;
+  justify-content: center; /* Ensure internal content is centered */
+  gap: 0.4rem;
+}
+
+/* On Desktop: Split into 2 rows (Group 1&2 on Row 1, Group 3&4 on Row 2) */
+@media (min-width: 900px) {
+  .madlibs-group:nth-child(3) {
+    flex-basis: 100%; /* Force Group 3 and 4 to the next line */
+    margin-top: 0.5rem;
+  }
+}
+
+@media (max-width: 900px) {
   .madlibs-sentence {
-    gap: 0.4rem 0.3rem;
+    gap: 0.8rem 0.3rem; /* Increase vertical gap between groups */
     line-height: 1.3;
+  }
+  .madlibs-group {
+    flex-basis: 100%; /* Each of the 4 groups gets its own line */
+    justify-content: center;
   }
 }
 
@@ -440,7 +459,7 @@ input[type="date"]::-webkit-inner-spin-button {
 
 /* Fix for date input width - preventing it from stretching the underline weirdly */
 input[type="date"].madlibs-input {
-  width: 8.5ch; /* Enough for MM/DD/YYYY or YYYY-MM-DD */
+  width: 10.5ch; /* Increased to prevent overlap with "at" */
   min-width: 0;
   padding: 0;
 }
