@@ -20,14 +20,7 @@
     <link rel="stylesheet" href="css/components.css">
     
     <!-- Libraries -->
-    <!-- Lenis for smooth scrolling -->
-    <script src="https://unpkg.com/@studio-freight/lenis@1.0.35/dist/lenis.min.js" defer></script>
-    <!-- GSAP Core and ScrollTrigger -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js" defer></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js" defer></script>
-    
-    <!-- MAIN JS -->
-    <script src="js/main.js" defer></script>
+    <!-- Lenis, GSAP, etc. will be loaded at the bottom for stability -->
 </head>
 <body class="smooth-scroll">
 
@@ -500,8 +493,14 @@
                     <a href="https://swiggy.com" target="_blank" class="delivery-badge swiggy-badge">Swiggy</a>
                 </div>
             </div>
-        </div>
     </div>
 
+    <!-- LIBRARIES -->
+    <script src="https://unpkg.com/@studio-freight/lenis@1.0.35/dist/lenis.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    
+    <!-- MAIN JS -->
+    <script src="js/main.js"></script>
 </body>
 </html>
