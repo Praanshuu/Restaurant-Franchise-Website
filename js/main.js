@@ -7,21 +7,26 @@
 document.addEventListener('DOMContentLoaded', () => {
 
     // 1. Initialize Lenis Smooth Scrolling (Buttery smooth feel)
-    const lenis = new Lenis({
-        duration: 1.5,
-        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), 
-        direction: 'vertical',
-        gestureDirection: 'vertical',
-        smooth: true,
-        smoothTouch: false,
-        touchMultiplier: 2,
-    });
+    let lenis;
+    if (typeof Lenis !== 'undefined') {
+        lenis = new Lenis({
+            duration: 1.5,
+            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), 
+            direction: 'vertical',
+            gestureDirection: 'vertical',
+            smooth: true,
+            smoothTouch: false,
+            touchMultiplier: 2,
+        });
 
-    function raf(time) {
-        lenis.raf(time);
+        function raf(time) {
+            lenis.raf(time);
+            requestAnimationFrame(raf);
+        }
         requestAnimationFrame(raf);
+    } else {
+        console.warn('Lenis not found. Smooth scrolling disabled.');
     }
-    requestAnimationFrame(raf);
 
     // Navbar Scroll-to-Hide Logic (Delegated to robust GSAP ScrollTrigger below)
     const navbar = document.getElementById('navbar');
@@ -43,12 +48,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function openMenu() {
         menuOverlay.classList.add('is-active');
-        lenis.stop(); // Stop scroll when menu is open
+        if (lenis) lenis.stop(); // Stop scroll when menu is open
     }
 
     function closeMenu() {
         menuOverlay.classList.remove('is-active');
-        lenis.start();
+        if (lenis) lenis.start();
     }
 
     if (menuTrigger && menuCloseBtn && menuOverlay) {
@@ -102,15 +107,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (menuOverlayReserveBtn) {
         menuOverlayReserveBtn.addEventListener('click', () => {
-            fullMenuOverlay.classList.remove('is-active');
-            if (typeof lenis !== 'undefined') {
+            if (fullMenuOverlay) fullMenuOverlay.classList.remove('is-active');
+            if (lenis) {
                 lenis.start();
                 // Adding a slight delay to allow modal close animation to start before scrolling
                 setTimeout(() => {
                     lenis.scrollTo('#reservation', { offset: -100 });
                 }, 100);
             } else {
-                document.getElementById('reservation').scrollIntoView({ behavior: 'smooth' });
+                const resSection = document.getElementById('reservation');
+                if (resSection) resSection.scrollIntoView({ behavior: 'smooth' });
             }
         });
     }

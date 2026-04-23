@@ -66,8 +66,8 @@
     <main>
         <!-- 1. The Teaser (Hero) - Bleeding Typography & Mesh Glow -->
         <section id="hero" class="hero section-full">
-            <video class="hero-bg-video" autoplay loop muted playsinline>
-                <source src="assets/file2.mp4" type="video/mp4">
+            <video class="hero-bg-video" autoplay loop muted playsinline preload="metadata">
+                <source src="assets/file2.webm" type="video/mp4">
             </video>
             <!-- Glowing mesh radial gradient separating text from video -->
             <div class="hero-mesh-overlay"></div>
@@ -210,7 +210,7 @@
                     <div class="tasting-panel">
                         <div class="tasting-card glass-panel hover-glow-card">
                             <div class="card-image-wrap">
-                                <img src="assets/images/menu/truffle_arancini.png" alt="Truffle Arancini">
+                                <img src="assets/images/menu/Truffle_Arancini.png" alt="Truffle Arancini">
                             </div>
                             <div class="card-content">
                                 <h3>Truffle Arancini</h3>
@@ -501,6 +501,6 @@
     </div>
 
     <!-- MAIN JS -->
-    <script src="js/main.js"></script>
+    <script type="module" defer src="/js/main.js"></script>
 </body>
 </html>
