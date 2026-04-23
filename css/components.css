@@ -438,6 +438,13 @@ input[type="date"]::-webkit-inner-spin-button {
   display: none;
 }
 
+/* Fix for date input width - preventing it from stretching the underline weirdly */
+input[type="date"].madlibs-input {
+  width: 8.5ch; /* Enough for MM/DD/YYYY or YYYY-MM-DD */
+  min-width: 0;
+  padding: 0;
+}
+
 /* Custom dark-themed dropdown — matches the glass card */
 .madlibs-input option {
   background-color: #111111;
