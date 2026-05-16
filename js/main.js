@@ -72,12 +72,32 @@ document.addEventListener('DOMContentLoaded', () => {
     const themeBtn = document.getElementById('themeToggleBtn');
     const htmlEl = document.documentElement;
 
+    // Auto detect system theme
+    const prefersDarkScheme = window.matchMedia("(prefers-color-scheme: dark)");
+    
+    // Set initial theme
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme) {
+        htmlEl.setAttribute('data-theme', savedTheme);
+    } else {
+        htmlEl.setAttribute('data-theme', prefersDarkScheme.matches ? 'dark' : 'light');
+    }
+
     if (themeBtn) {
         themeBtn.addEventListener('click', () => {
             const currentTheme = htmlEl.getAttribute('data-theme');
-            htmlEl.setAttribute('data-theme', currentTheme === 'dark' ? 'light' : 'dark');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            htmlEl.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
         });
     }
+
+    // Listen for system theme changes if user hasn't explicitly set a preference
+    prefersDarkScheme.addEventListener('change', (e) => {
+        if (!localStorage.getItem('theme')) {
+            htmlEl.setAttribute('data-theme', e.matches ? 'dark' : 'light');
+        }
+    });
 
     // 3.5 Full Menu Overlay Logic
     const openFullMenuBtn = document.getElementById('openFullMenuBtn');
@@ -166,34 +186,33 @@ document.addEventListener('DOMContentLoaded', () => {
         const tastingTrack = document.getElementById('tastingTrack');
 
         if (tastingSection && tastingTrack) {
-            // Calculate the right-side padding to add as breathing room at the end
-            const getRightPad = () => {
-                const padStr = getComputedStyle(document.documentElement)
-                    .getPropertyValue('--content-padding').trim();
-                // Parse the computed pixel value from the container style
-                const dummy = document.createElement('div');
-                dummy.style.cssText = `position:absolute;visibility:hidden;width:${padStr}`;
-                document.body.appendChild(dummy);
-                const px = dummy.getBoundingClientRect().width;
-                document.body.removeChild(dummy);
-                return px;
-            };
+            let mm = gsap.matchMedia();
 
-            gsap.to(tastingTrack, {
-                // Stop short by one content-padding so last card doesn't sit at edge;
-                // the ::after pseudo adds visual padding after the last card too.
-                x: () => -(tastingTrack.scrollWidth - window.innerWidth),
-                ease: "none",
-                scrollTrigger: {
-                    trigger: tastingSection,
-                    pin: true,
-                    scrub: 1,
-                    // Center the natural-height section in the viewport while scrolling
-                    start: "center center",
-                    end: () => `+=${tastingTrack.scrollWidth - window.innerWidth}`,
-                    invalidateOnRefresh: true
-                }
-            });
+            // Removed GSAP scroll-hijacking for tasting track to allow native CSS horizontal scroll on all devices.
+
+            // Mobile auto-glow for cards in view (UI/UX enhancement)
+            const cards = tastingTrack.querySelectorAll('.hover-glow-card');
+            if (cards.length > 0) {
+                const observer = new IntersectionObserver((entries) => {
+                    if (window.innerWidth <= 900) {
+                        entries.forEach(entry => {
+                            if (entry.isIntersecting) {
+                                entry.target.classList.add('is-active');
+                            } else {
+                                entry.target.classList.remove('is-active');
+                            }
+                        });
+                    } else {
+                        // Ensure clean state on desktop
+                        cards.forEach(card => card.classList.remove('is-active'));
+                    }
+                }, {
+                    root: tastingTrack, // Observe scrolling within the track container
+                    threshold: 0.6      // Card must be 60% visible to glow
+                });
+
+                cards.forEach(card => observer.observe(card));
+            }
         }
 
         // c. Parallax effects for atmospheric image

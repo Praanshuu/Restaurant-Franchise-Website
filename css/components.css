@@ -97,6 +97,7 @@
   background: none;
   border: none;
   cursor: pointer;
+  z-index: 10;
 }
 .menu-close:hover { opacity: 1; }
 
@@ -194,7 +195,8 @@
 .hover-glow-card {
   transition: border-color var(--transition-normal), box-shadow var(--transition-normal), transform var(--transition-normal);
 }
-.hover-glow-card:hover {
+.hover-glow-card:hover,
+.hover-glow-card.is-active {
   border-color: rgba(229, 169, 61, 0.5);
   box-shadow: 0 8px 32px rgba(229, 169, 61, 0.15);
   transform: translateY(-4px);
@@ -249,7 +251,7 @@
 
 /* The glass inner card sits above the wrapper's rotating background */
 .reservation-inner-glass {
-  /* Glassmorphism: very dark near-opaque base to block spinning bg */
+  /* Glassmorphism: near-opaque base to block spinning bg */
   background: rgba(8, 8, 8, 0.92);
   backdrop-filter: blur(32px);
   -webkit-backdrop-filter: blur(32px);
@@ -260,6 +262,9 @@
   position: relative;
   z-index: 2;
   overflow: hidden; /* Contain the inner glow pseudo */
+}
+[data-theme="light"] .reservation-inner-glass {
+  background: rgba(250, 247, 242, 0.92);
 }
 
 /* Subtle top-center radial amber glow — like a candle illuminating the form */
@@ -464,10 +469,10 @@ input[type="date"].madlibs-input {
   padding: 0;
 }
 
-/* Custom dark-themed dropdown — matches the glass card */
+/* Custom themed dropdown — matches the glass card */
 .madlibs-input option {
-  background-color: #111111;
-  color: #F7F7F7;
+  background-color: var(--color-surface-elevated);
+  color: var(--color-text);
   font-style: normal;
   font-family: 'Plus Jakarta Sans', sans-serif;
   font-size: 1rem;
@@ -674,6 +679,11 @@ input[type="date"].madlibs-input {
   gap: var(--space-4);
 }
 
+[data-theme="light"] .btn-accent-glow {
+  color: #000;
+  font-weight: 600;
+}
+
 .author-avatar {
   width: 48px;
   height: 48px;
@@ -688,7 +698,7 @@ input[type="date"].madlibs-input {
 }
 
 .text-gradient {
-  background: var(--color-accent-grad);
+  background: var(--text-gradient);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -852,7 +862,7 @@ input[type="date"].madlibs-input {
   color: var(--color-text);
 }
 .fap-outline:hover {
-  background: rgba(255, 255, 255, 0.08); 
+  background: var(--color-hover-subtle); 
 }
 
 .fap-solid {
@@ -965,7 +975,7 @@ input[type="date"].madlibs-input {
   position: fixed;
   inset: 0;
   z-index: 1000;
-  background-color: rgba(3, 3, 3, 0.95);
+  background-color: rgba(var(--color-overlay-base), 0.95);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   display: flex;
@@ -1060,7 +1070,7 @@ input[type="date"].madlibs-input {
   display: flex;
   align-items: center;
   gap: var(--space-4);
-  background: rgba(255, 255, 255, 0.02);
+  background: var(--color-hover-subtle);
   padding: 10px;
   border-radius: var(--radius-lg);
   border: 1px solid transparent;
@@ -1068,7 +1078,7 @@ input[type="date"].madlibs-input {
 }
 
 .menu-item-row:hover {
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--color-glass);
   border-color: var(--color-glass-border);
 }
 
@@ -1114,7 +1124,7 @@ input[type="date"].madlibs-input {
   padding: clamp(1rem, 3vw, 1.5rem) 0;
   background: var(--color-surface-elevated);
   border-top: 1px solid var(--color-glass-border);
-  box-shadow: 0 -10px 40px rgba(0,0,0,0.5);
+  box-shadow: 0 -10px 40px rgba(var(--color-overlay-base), 0.5);
 }
 
 .action-footer-flex {

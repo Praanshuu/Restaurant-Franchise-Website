@@ -75,7 +75,7 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Reservation section blends directly from hero — no gap */
 #reservation {
-  background: rgba(3, 3, 3, 1); /* Matches the solid bottom of hero gradient exactly */
+  background: var(--color-bg); /* Theme-aware: matches hero gradient bottom */
   padding-top: var(--space-16); /* Reduced top since hero bleeds into it */
 }
 .section-full {
@@ -102,26 +102,31 @@ h1, h2, h3, h4, h5, h6 {
   pointer-events: none;
 }
 
-/* Navbar - Redesigned with blur background */
+/* Navbar - Cinematic Glassmorphism */
 .navbar {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
-  height: clamp(70px, 8vw, 100px);
-  z-index: 50;
+  height: clamp(80px, 10vw, 120px);
+  z-index: 100;
   pointer-events: none;
   
-  /* Added Glass blur effect instead of difference blend */
-  background: rgba(3, 3, 3, 0.5);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
-  transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+  /* Theme-aware glassmorphism */
+  background: var(--color-nav-bg);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border-bottom: 1px solid var(--color-nav-border);
+  transition: all var(--transition-normal);
 }
 
 .navbar.nav-hidden {
   transform: translateY(-100%);
+}
+
+[data-theme="light"] .navbar {
+  backdrop-filter: blur(32px) saturate(180%);
+  -webkit-backdrop-filter: blur(32px) saturate(180%);
 }
 
 .nav-container {
@@ -132,13 +137,45 @@ h1, h2, h3, h4, h5, h6 {
   padding: 0 var(--content-padding);
 }
 
+.brand-group {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  text-decoration: none;
+  pointer-events: auto;
+}
+
+.brand-img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid var(--color-glass-border);
+}
+
+.brand-text {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
 .brand-logo {
   font-family: var(--font-display);
-  font-size: clamp(1.5rem, 5vw, 1.75rem);
-  pointer-events: auto;
-  text-transform: uppercase;
+  font-size: clamp(1.1rem, 3vw, 1.35rem);
+  font-weight: 500;
+  line-height: 1.1;
+  color: var(--color-text);
   letter-spacing: 0.05em;
-  color: var(--color-text); /* Now explicitly using text color since mix-blend is gone */
+  transition: color var(--transition-fast);
+}
+
+.brand-sub {
+  font-family: var(--font-body);
+  font-size: 0.7rem;
+  color: var(--color-text-muted);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  margin-top: 2px;
 }
 
 /* Hero Section */
@@ -168,8 +205,21 @@ h1, h2, h3, h4, h5, h6 {
   left: 0;
   width: 100%;
   height: 100%;
-  /* Gradient fades hero video to solid black at the very bottom — seamlessly matching reservation bg */
-  background: linear-gradient(to top, rgba(3, 3, 3, 1) 0%, rgba(3, 3, 3, 0.65) 30%, rgba(3, 3, 3, 0.1) 70%, rgba(3, 3, 3, 0) 100%);
+  /* Theme-aware gradient: fades hero video to bg color at the bottom, adjusted to be more subtle (less milky) */
+  background: linear-gradient(to top, rgba(var(--color-overlay-base), 1) 0%, rgba(var(--color-overlay-base), 0.3) 30%, rgba(var(--color-overlay-base), 0.05) 70%, rgba(var(--color-overlay-base), 0) 100%);
+  z-index: -1;
+}
+
+[data-theme="light"] .hero-mesh-overlay {
+  /* Minimal white transition at the very bottom, keeping the rest of the video cinematic */
+  background: linear-gradient(to top, rgba(var(--color-overlay-base), 1) 0%, rgba(var(--color-overlay-base), 0) 15%);
+}
+
+[data-theme="light"] .hero-mesh-overlay::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.45) 100%);
   z-index: -1;
 }
 
@@ -190,9 +240,16 @@ h1, h2, h3, h4, h5, h6 {
   left: 0;
   width: 100%;
   height: 10px; /* Only tall enough to bridge the gap, preventing overlap with text */
-  background: rgba(3, 3, 3, 1);
+  background: var(--color-bg);
   z-index: 5; /* Above video, below content */
   pointer-events: none;
+}
+
+/* Removed Light Mode Text Gradients to allow default black text */
+
+[data-theme="light"] .hero-title,
+[data-theme="light"] .hero-subtitle {
+  color: #FFFFFF;
 }
 
 .hero-content {
@@ -213,8 +270,10 @@ h1, h2, h3, h4, h5, h6 {
   width: 100%;
   height: 100vh;
   height: 100svh;
-  background-color: var(--color-bg);
-  z-index: 100;
+  background-color: rgba(var(--color-overlay-base), 0.97);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  z-index: 110;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -232,28 +291,51 @@ h1, h2, h3, h4, h5, h6 {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--space-6);
+  gap: clamp(0.5rem, 2vh, 1rem); /* Reduced gap to prevent overlap on smaller screens */
 }
 
 .nav-item {
   font-family: var(--font-display);
-  font-size: clamp(2rem, 8vw, 4.5rem);
+  font-size: clamp(1.5rem, 4.5vh, 3.5rem); /* Reduced font size to prevent overlapping */
   text-transform: uppercase;
   position: relative;
   overflow: hidden;
   opacity: 0;
-  transform: translateY(40px);
-  transition: opacity 0.6s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+  transform: translateY(40px) translateX(0);
+  transition: opacity 0.6s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1), color 0.3s ease;
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
 }
 
-.nav-item:hover {
-  font-style: italic;
-  color: var(--color-accent);
+.nav-num {
+  font-family: var(--font-body);
+  font-size: clamp(0.8rem, 1.5vh, 1rem);
+  color: var(--color-text-muted);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  transition: color 0.3s ease;
 }
 
 .menu-overlay.is-active .nav-item {
   opacity: 1;
-  transform: translateY(0);
+  transform: translateY(0) translateX(0);
+}
+
+/* Hover hierarchy - Dim others, emphasize hovered */
+.menu-overlay.is-active .nav-links:hover .nav-item {
+  opacity: 0.3;
+}
+
+.menu-overlay.is-active .nav-links .nav-item:hover {
+  opacity: 1;
+  transform: translateY(0) translateX(15px);
+  font-style: italic;
+  color: var(--color-accent);
+}
+
+.menu-overlay.is-active .nav-links .nav-item:hover .nav-num {
+  color: var(--color-accent);
 }
 
 /* Stagger calculation */
@@ -267,13 +349,30 @@ h1, h2, h3, h4, h5, h6 {
 
 .menu-footer {
   position: absolute;
-  bottom: var(--space-8);
+  bottom: clamp(1rem, 4vh, var(--space-8));
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-4);
   text-align: center;
   font-size: clamp(0.75rem, 2vw, 0.875rem);
   color: var(--color-text-muted);
   opacity: 0;
   transition: opacity 0.5s ease 0.8s;
   padding: 0 var(--content-padding);
+  pointer-events: auto; /* Ensure buttons are clickable */
+}
+
+@media (min-width: 900px) {
+  .menu-footer {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-end;
+  }
+  .menu-footer p {
+    text-align: right;
+  }
 }
 
 .menu-overlay.is-active .menu-footer { opacity: 1; }
@@ -297,8 +396,8 @@ h1, h2, h3, h4, h5, h6 {
   padding-left: var(--content-padding);
   font-size: clamp(2.75rem, 6vw, 4rem);
   z-index: 10;
-  text-shadow: 0 4px 20px rgba(0,0,0,0.6);
-  margin-bottom: var(--space-6);
+  text-shadow: var(--shadow-text);
+  margin-bottom: var(--space-12);
   /* Prevent title from being too tall on small devices */
   flex-shrink: 0;
 }
@@ -311,6 +410,16 @@ h1, h2, h3, h4, h5, h6 {
   padding: 0 var(--content-padding);
   align-items: stretch;
   min-height: 0; /* Allow flex child to shrink inside the column */
+  
+  /* Native swipe support for all devices */
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none; /* Firefox */
+}
+
+.tasting-track::-webkit-scrollbar {
+  display: none; /* Chrome/Safari */
 }
 
 /* Ghost element after the last panel to give symmetric right-side breathing room */
@@ -333,6 +442,7 @@ h1, h2, h3, h4, h5, h6 {
   min-height: clamp(500px, 70svh, 700px);
   display: flex;
   align-items: stretch;
+  scroll-snap-align: center;
 }
 
 /* Grids */
@@ -398,18 +508,86 @@ h1, h2, h3, h4, h5, h6 {
 .footer {
   border-top: 1px solid var(--color-border);
   background-color: var(--color-surface);
-  /* Reduced bottom padding slightly to look better on mobile while still clearing the floating pill */
-  padding: var(--space-16) 0 calc(var(--space-16) + 50px) 0; 
-  text-align: center;
+  /* Use clamp for padding to ensure lots of breathing room on large screens */
+  padding: var(--space-16) 0 clamp(var(--space-8), 4vw, var(--space-16)) 0; 
 }
 
-.footer-content {
+.footer-top {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-12);
+  margin-bottom: var(--space-16);
+}
+
+@media (min-width: 900px) {
+  .footer-top {
+    grid-template-columns: 1.5fr 1fr;
+    gap: var(--space-24);
+  }
+}
+
+.footer-brand-col {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: var(--space-6);
+  align-items: flex-start;
+  gap: var(--space-4);
+}
+
+.footer-desc {
+  color: var(--color-text-muted);
+  max-width: 35ch;
+  line-height: 1.6;
+  font-size: clamp(1rem, 1.5vw, 1.1rem);
+}
+
+.footer-links-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: var(--space-8);
+}
+
+.footer-nav h4 {
+  color: var(--color-text);
+  margin-bottom: var(--space-4);
+  font-size: 0.85rem;
+  font-weight: 700;
+  font-family: var(--font-body);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.footer-nav a {
+  display: block;
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-3);
+  font-size: 0.95rem;
+  transition: color var(--transition-fast);
+}
+
+.footer-nav a:hover {
+  color: var(--color-accent);
+}
+
+.footer-bottom {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-4);
+  padding-top: var(--space-8);
+  border-top: 1px solid var(--color-border);
+  color: var(--color-text-muted);
+  font-size: 0.85rem;
+}
+
+@media (min-width: 600px) {
+  .footer-bottom {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
 }
 
 .brand-footer {
-  font-size: clamp(2rem, 6vw, 3.5rem);
+  font-size: clamp(2.5rem, 6vw, 4rem);
+  margin-left: -0.05em; /* Optical alignment */
 }

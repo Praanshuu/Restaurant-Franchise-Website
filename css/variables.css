@@ -12,11 +12,18 @@
   
   --color-accent: #E5A93D;
   --color-accent-grad: linear-gradient(135deg, #E5A93D 0%, #C67C4E 100%);
+  --text-gradient: linear-gradient(to bottom, #E5A93D 0%, #C67C4E 100%);
   --color-accent-hover: #D4982E;
   
   --color-border: rgba(255, 255, 255, 0.08);
   --color-glass: rgba(15, 15, 15, 0.5);
   --color-glass-border: rgba(229, 169, 61, 0.15);
+
+  /* Navbar & Overlay */
+  --color-nav-bg: rgba(3, 3, 3, 0.6);
+  --color-nav-border: rgba(255, 255, 255, 0.05);
+  --color-overlay-base: 3, 3, 3; /* RGB triplet for gradient alpha blending */
+  --color-hover-subtle: rgba(255, 255, 255, 0.08);
 
   /* Typography */
   --font-display: 'Instrument Serif', serif;
@@ -44,9 +51,10 @@
   --radius-lg: 32px;
   --radius-pill: 9999px;
 
-  /* Elevations */
+  /* Elevations & Shadows */
   --shadow-glass: 0 16px 40px 0 rgba(0, 0, 0, 0.4);
   --shadow-glow: 0 0 30px rgba(229, 169, 61, 0.25);
+  --shadow-text: 0 4px 20px rgba(0, 0, 0, 0.6);
   
   /* Transitions */
   --transition-fast: 200ms cubic-bezier(0.2, 0.8, 0.2, 1);
@@ -62,12 +70,21 @@
   --color-surface-elevated: #F1ECE6;
   --color-text: #080808;
   --color-text-muted: #555555;
-  --color-accent: #C67C4E;
-  --color-accent-grad: linear-gradient(135deg, #C67C4E 0%, #A9653D 100%);
-  --color-accent-hover: #A9653D;
+  --color-accent: #E55D00;
+  --color-accent-grad: linear-gradient(135deg, #FFB347 0%, #FF7B00 100%); /* Vibrant left-to-right gradient for buttons */
+  --text-gradient: linear-gradient(to bottom, #FFC872 0%, #D85500 100%); /* Brighter top, darker bottom for text */
+  --color-accent-hover: #CC5200;
   --color-border: rgba(0, 0, 0, 0.08);
   --color-glass: rgba(255, 255, 255, 0.6);
   --color-glass-border: rgba(198, 124, 78, 0.15);
+
+  /* Navbar & Overlay */
+  --color-nav-bg: rgba(255, 255, 255, 0.6); /* Translucent white to reveal blur */
+  --color-nav-border: rgba(0, 0, 0, 0.08);
+  --color-overlay-base: 250, 247, 242; /* Light cream RGB triplet */
+  --color-hover-subtle: rgba(0, 0, 0, 0.05);
+
   --shadow-glass: 0 16px 40px 0 rgba(0, 0, 0, 0.05);
   --shadow-glow: 0 0 30px rgba(198, 124, 78, 0.15);
+  --shadow-text: 0 2px 10px rgba(0, 0, 0, 0.08); /* Softer shadow for light mode */
 }
